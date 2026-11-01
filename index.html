@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f7f0" />
+  <meta name="description" content="レールをつないで、じぶんだけの鉄道を走らせよう。" />
+  <meta name="railway-game" content="little-railway-v1" />
+  <title>ちいさな鉄道｜つくって、はしろう</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2375bba7'/%3E%3Crect x='7' y='4' width='18' height='21' rx='6' fill='white'/%3E%3Cpath d='M10 13a6 6 0 0 1 12 0v2H10z' fill='%2375bba7'/%3E%3Ccircle cx='11' cy='20' r='1.5' fill='%2375bba7'/%3E%3Ccircle cx='21' cy='20' r='1.5' fill='%2375bba7'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+    {"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/addons/"}}
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="あそびの道具">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><rect x="8" y="5" width="24" height="26" rx="8" fill="white"/><path d="M12.5 16.5a7.5 7.5 0 0 1 15 0v2h-15v-2Z" fill="#63B4A0"/><circle cx="14.5" cy="24" r="2" fill="#63B4A0"/><circle cx="25.5" cy="24" r="2" fill="#63B4A0"/><path d="m13 34 3-4m11 4-3-4" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div><div class="brand-name">ちいさな鉄道</div><div class="brand-sub">MY LITTLE RAILWAY</div></div>
+      </div>
+
+      <div class="intro">
+        <div class="eyebrow"><span></span> さあ、あそぼう！</div>
+        <h1>つくって、<br><em>はしろう。</em></h1>
+        <p>レールをつないで、<br>じぶんだけの鉄道をつくろう。</p>
+      </div>
+
+      <div class="tool-sections">
+        <section class="tool-section" aria-labelledby="track-heading">
+          <div class="section-heading"><div><span class="section-number">01</span><h2 id="track-heading">レールをえらぶ</h2></div><span class="section-en">TRACKS</span></div>
+          <div class="track-options" role="group" aria-label="レールの種類">
+            <button class="track-option selected" data-tool="straight" aria-pressed="true" title="まっすぐなレール">
+              <svg viewBox="0 0 72 52" aria-hidden="true"><path d="M10 26h52" class="rail-base"/><path d="M10 20h52M10 32h52" class="rail-line"/><path d="M19 19v14m11-14v14m11-14v14m11-14v14" class="rail-tie"/></svg><span>まっすぐ</span>
+            </button>
+            <button class="track-option" data-tool="left" aria-pressed="false" title="ひだりカーブ">
+              <svg viewBox="0 0 72 52" aria-hidden="true"><path d="M10 39h13c18 0 22-5 22-26" class="rail-base"/><path d="M10 33h13c13 0 16-3 16-20M10 45h13c22 0 28-8 28-32" class="rail-line"/><path d="M19 32v14m12-15 3 13m8-21 12 4" class="rail-tie"/></svg><span>ひだり</span>
+            </button>
+            <button class="track-option" data-tool="right" aria-pressed="false" title="みぎカーブ">
+              <svg viewBox="0 0 72 52" aria-hidden="true"><g transform="translate(0 52) scale(1 -1)"><path d="M10 39h13c18 0 22-5 22-26" class="rail-base"/><path d="M10 33h13c13 0 16-3 16-20M10 45h13c22 0 28-8 28-32" class="rail-line"/><path d="M19 32v14m12-15 3 13m8-21 12 4" class="rail-tie"/></g></svg><span>みぎ</span>
+            </button>
+          </div>
+          <div class="tool-actions">
+            <button id="erase-button" class="small-action" data-tool="erase" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none"><path d="m4 14 8-8a2 2 0 0 1 3 0l4 4a2 2 0 0 1 0 3l-6 6H8l-4-4a1 1 0 0 1 0-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 11 6 6M12 19h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>レールをけす</button>
+            <button id="undo-button" class="small-action"><svg viewBox="0 0 24 24" fill="none"><path d="M8 8 4.5 11.5 8 15M5 11.5h8.5a5 5 0 1 1 0 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>もどす</button>
+          </div>
+        </section>
+
+        <section class="tool-section trains-section" aria-labelledby="train-heading">
+          <div class="section-heading"><div><span class="section-number">02</span><h2 id="train-heading">でんしゃをおく</h2></div><span class="section-en">TRAINS</span></div>
+          <p class="section-help">えらんでから、レールをタップ</p>
+          <div class="train-options" role="group" aria-label="でんしゃの種類">
+            <button class="train-option" data-tool="train-mint" aria-pressed="false">
+              <span class="train-illustration mint"><svg viewBox="0 0 95 50" aria-hidden="true"><ellipse cx="48" cy="41" rx="37" ry="4" fill="#B4CFC4"/><rect x="13" y="14" width="67" height="25" rx="7" fill="#FAF6E7" stroke="#426762" stroke-width="1.3"/><path d="M13 28h67v7H13z" fill="#70B8A0"/><path d="M19 18h13v8H19zm17 0h13v8H36zm17 0h13v8H53zm17 0h5v8h-5z" fill="#53777A"/><circle cx="26" cy="39" r="4" fill="#424F51"/><circle cx="67" cy="39" r="4" fill="#424F51"/></svg></span>
+              <span class="train-text"><strong>ミント号</strong><small>のんびり でんしゃ</small></span><span class="train-plus">＋</span>
+            </button>
+            <button class="train-option" data-tool="train-coral" aria-pressed="false">
+              <span class="train-illustration coral"><svg viewBox="0 0 95 50" aria-hidden="true"><ellipse cx="47" cy="41" rx="37" ry="4" fill="#E3C5B7"/><path d="M11 31c0-10 7-17 18-17h33c9 0 14 5 20 15l3 6c1 2-1 4-4 4H17c-4 0-6-3-6-8Z" fill="#FFF8E9" stroke="#7B5551" stroke-width="1.3"/><path d="M12 29h70l3 6H12z" fill="#E77E6C"/><path d="M19 19h12v7H18zm16 0h11v7H35zm15 0h11v7H50zm15 1c5 1 8 3 11 6H65z" fill="#5B6F78"/><circle cx="25" cy="39" r="4" fill="#554B4B"/><circle cx="69" cy="39" r="4" fill="#554B4B"/></svg></span>
+              <span class="train-text"><strong>あかい特急</strong><small>すいすい はしる</small></span><span class="train-plus">＋</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="run-caption"><span class="status-dot"></span><span id="run-caption">いつでも出発できるよ</span></div>
+        <div class="run-controls"><button id="play-button" class="play-button"><span class="play-icon">▶</span><span>しゅっぱつ！</span></button><button id="reverse-button" class="reverse-button" title="列車の向きをかえる" aria-label="列車の向きをかえる"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8h13m0 0-3-3m3 3-3 3M19 16H6m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        <div class="save-note"><svg viewBox="0 0 16 16" fill="none"><path d="M3 2.5h8l2 2v9H3zM5 2.5v4h5v-4M5 13v-4h6v4" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg> つくったコースは自動で保存されます</div>
+      </div>
+    </aside>
+
+    <main class="playground" aria-label="3Dレールのあそび場">
+      <div id="scene" class="scene" aria-label="3Dのレールと列車。ドラッグで視点を回せます。"></div>
+      <div class="scene-top">
+        <div class="scene-heading"><div class="scene-kicker"><span class="sparkle">✳</span> YOUR LITTLE WORLD</div><h2>どんな景色を、走ろう？</h2><p>つなげるたびに、ワクワクがひろがる。</p></div>
+        <div class="top-actions"><button id="help-button" class="round-action" aria-label="あそびかた" title="あそびかた">?</button><button id="reset-button" class="reset-button"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 0 2-5.3L4 9m0-5v5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>あたらしく</button></div>
+      </div>
+      <div class="scene-label"><span class="label-icon">✦</span><div><strong>じゆうに あそぼう</strong><small>FREE PLAY</small></div></div>
+      <div class="course-card"><div class="course-title"><span>YOUR COURSE</span><span class="course-dot">●</span></div><div class="course-row"><span>レール</span><strong><span id="piece-count">8</span><small> こ</small></strong></div><div class="course-line"></div><div class="course-row"><span>コース</span><strong id="course-status" class="course-status">つながってる！</strong></div></div>
+      <div id="tip" class="scene-tip"><span id="tip-icon" class="tip-icon">✦</span><span id="tip-text">ループが完成！「レールをけす」で組みかえてみよう</span></div>
+      <div class="scene-bottom"><span><svg viewBox="0 0 24 24" fill="none"><path d="m8 8 4-4 4 4M8 16l4 4 4-4M8 8v8m8-8v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>ドラッグで視点を回転</span><span class="bottom-divider"></span><span>スクロールでズーム</span></div>
+      <div class="scene-corner">MADE FOR LITTLE ADVENTURES <span>✳</span></div>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <dialog id="help-dialog" class="help-dialog"><div class="help-content"><button id="close-help" class="close-help" aria-label="閉じる">×</button><div class="help-badge">LET'S PLAY!</div><h2>あそびかた</h2><p class="help-intro">レールをつなげて、でんしゃを走らせよう。</p><ol><li><span>01</span><div><strong>レールをつなごう</strong><p>レールをえらんで、コースの先にある「＋」を押そう。カーブを組み合わせると、ぐるっと一周できるよ。</p></div></li><li><span>02</span><div><strong>でんしゃをおこう</strong><p>好きなでんしゃをえらび、レールを押して置こう。車両はいつでも置きかえられるよ。</p></div></li><li><span>03</span><div><strong>しゅっぱつ！</strong><p>しゅっぱつボタンで走り出すよ。つながっていない端では、でんしゃは止まります。</p></div></li></ol><div class="help-footer">完成したコースは「レールをけす」で組みかえられます。<br>「あたらしく」で、まっすぐなレールから作れます。</div><button id="start-help" class="help-start">わかった！</button></div></dialog>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
